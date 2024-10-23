@@ -51,7 +51,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 
 const preloader = ref('src/img/PreloaderAlpa_130x130.svg');
 const baseLayer = ref('src/img/Layer_1_for_all_rokets_720x1280.svg');
@@ -93,7 +93,8 @@ function scrollToRocketById(rocketId: string) {
   }
 }
 
-const winSlotFrame = ref(1);
+const winSlotFrame = ref(null);
+
 function scrollToSlotFrame() {
   const slotFrameId = slotFrames.value[activeRocket.value - 1];
   const slotFrame = document.getElementById(slotFrameId);
@@ -109,11 +110,27 @@ function scrollToSlotFrame() {
       // Добавляем класс slot_frame_animation_full_speed
       slotFrame.classList.add('slot_frame_full_speed');
       
-      // Устанавливаем значение CSS-переменной --background-position-y
-      const backgroundPositionY = winSlotFrame.value === 1 ? '900%' : '905%';
-      slotFrame.style.setProperty('--background-position-y', backgroundPositionY);
+      // Устанавливаем значение winSlotFrame (например, 1 или 2)
+      winSlotFrame.value = 1; // или любое другое значение, которое вы хотите установить
+      
+      // Вызываем функцию для установки значения CSS-переменной и добавления/удаления классов после задержки
+      setTimeout(() => {
+        setSlotFrameStyles(slotFrame, winSlotFrame.value);
+      }, 1000);
     }, { once: true });
   }
+}
+
+function setSlotFrameStyles(slotFrame, winSlotFrameValue) {
+  // Устанавливаем значение CSS-переменной --background-position-y
+  const backgroundPositionY = winSlotFrameValue === 1 ? '-710%' : '-725%';
+  slotFrame.style.setProperty('--background-position-y', backgroundPositionY);
+  
+  // Удаляем класс slot_frame_full_speed
+  slotFrame.classList.remove('slot_frame_full_speed');
+  
+  // Добавляем класс slot_frame_end
+  slotFrame.classList.add('slot_frame_end');
 }
 
 function imageLoaded() {
@@ -241,29 +258,29 @@ function imageLoaded() {
 }
 
 .slot_frame_acceleration {
-  animation: slot_frame_animation_acceleration 5s ease-in forwards;
+  animation: slot_frame_animation_acceleration 3s ease-in forwards;
 }
 
 @keyframes slot_frame_animation_acceleration {
   100% {
-    background-position-y: -500%;
+    background-position-y: -250%;
   }
 }
 
 .slot_frame_full_speed {
-  animation: slot_frame_animation_full_speed 5s linear infinite;
+  animation: slot_frame_animation_full_speed 1s linear infinite;
 }
 
 @keyframes slot_frame_animation_full_speed {
   100% {
-    background-position-y: -700%;
+    background-position-y: -300%;
   }
 }
 
 
 
 .slot_frame_end {
-  animation: slot_frame_animation_end 5s ease-out infinite;
+  animation: slot_frame_animation_end 3s ease-out forwards;
 }
 
 @keyframes slot_frame_animation_end {
