@@ -72,20 +72,14 @@ const loadedImages = ref(0);
 const scrollToRocket = ref<HTMLElement | null>(null);
 const activeRocket = ref(1);
 
+const rockets = ref(['rocket_1', 'rocket_2', 'rocket_3']);
+
 function scrollToRocketById(rocketId: string) {
   const rocket = document.getElementById(rocketId);
   if (rocket) {
     rocket.scrollIntoView({ behavior: 'smooth' });
     scrollToRocket.value = rocket;
-
-    // Обновляем значение activeRocket в зависимости от выбранной ракеты
-    if (rocketId === 'rocket_1') {
-      activeRocket.value = 1;
-    } else if (rocketId === 'rocket_2') {
-      activeRocket.value = 2;
-    } else if (rocketId === 'rocket_3') {
-      activeRocket.value = 3;
-    }
+    activeRocket.value = rockets.value.indexOf(rocketId) + 1;
   }
 }
 
@@ -189,6 +183,7 @@ function imageLoaded() {
   transform: translate(-50%);
   display: flex;
   flex-direction: column;
+  scroll-behavior: smooth;
 }
 
 .rocket_container {
