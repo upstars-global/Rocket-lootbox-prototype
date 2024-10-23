@@ -8,7 +8,9 @@
     <div class="rockets_column">
       <div id="rocket_1" class="rocket_container">
         <img :src="baseLayer" class="rocket_base_layers" alt="" @load="imageLoaded"/>
-        <img :src="liteLayer2" class="rocket_base_layers" alt="" @load="imageLoaded"/> 
+        <img :src="liteLayer2" class="rocket_base_layers" alt="" @load="imageLoaded"/>
+        <div id="slot_frame_1" class="slot_frame" :style="{ backgroundImage: `url(${liteLayer3})` }">
+        </div>
         <img :src="liteLayer4" class="rocket_base_layers" alt="" @load="imageLoaded"/>
         <img :src="liteLayer5" class="rocket_base_layers" alt="" @load="imageLoaded"/>
         <img :src="liteLayer6" class="rocket_base_layers hide" alt="" @load="imageLoaded"/>
@@ -16,6 +18,8 @@
       <div id="rocket_2" class="rocket_container">
         <img :src="baseLayer" class="rocket_base_layers" alt="" @load="imageLoaded"/>
         <img :src="proLayer2" class="rocket_base_layers" alt="" @load="imageLoaded"/> 
+        <div id="slot_frame_2" class="slot_frame" :style="{ backgroundImage: `url(${proLayer3})` }">
+        </div>
         <img :src="proLayer4" class="rocket_base_layers" alt="" @load="imageLoaded"/>
         <img :src="proLayer5" class="rocket_base_layers" alt="" @load="imageLoaded"/>
         <img :src="proLayer6" class="rocket_base_layers hide" alt="" @load="imageLoaded"/>
@@ -23,6 +27,8 @@
       <div id="rocket_3" class="rocket_container">
         <img :src="baseLayer" class="rocket_base_layers" alt="" @load="imageLoaded"/>
         <img :src="maxLayer2" class="rocket_base_layers" alt="" @load="imageLoaded"/> 
+        <div id="slot_frame_3" class="slot_frame" :style="{ backgroundImage: `url(${maxLayer3})` }">
+        </div>
         <img :src="maxLayer4" class="rocket_base_layers" alt="" @load="imageLoaded"/>
         <img :src="maxLayer5" class="rocket_base_layers" alt="" @load="imageLoaded"/>
         <img :src="maxLayer6" class="rocket_base_layers hide" alt="" @load="imageLoaded"/>
@@ -38,7 +44,7 @@
         <img :src="btn1" :class="{'btn_row_btn': true, 'btn_inactive': activeRocket !== 1}" alt="" @click="scrollToRocketById('rocket_1')" />
         <img :src="btn2" :class="{'btn_row_btn': true, 'btn_inactive': activeRocket !== 2}" alt="" @click="scrollToRocketById('rocket_2')" />
         <img :src="btn3" :class="{'btn_row_btn': true, 'btn_inactive': activeRocket !== 3}" alt="" @click="scrollToRocketById('rocket_3')" />
-        <img :src="btn4" class="btn_row_btn" alt="" />
+        <img :src="btn4" class="btn_row_btn" @click="scrollToSlotFrame" alt="" />
       </div>
 
   
@@ -52,6 +58,9 @@ const baseLayer = ref('src/img/Layer_1_for_all_rokets_720x1280.svg');
 const liteLayer2 = ref('src/img/1-lite/Layer_2_1-Lite_720x1280.svg');
 const proLayer2 = ref('src/img/2-Pro/Layer_2_2-Pro_720x1280.svg');
 const maxLayer2 = ref('src/img/3-Max/Layer_2_3-Max_720x1280.svg');
+const liteLayer3 = ref('src/img/1-lite/Layer_3_1-Lite_258x1656.png');
+const proLayer3 = ref('src/img/2-Pro/Layer_3_2-Pro_258x1656.png');
+const maxLayer3 = ref('src/img/3-Max/Layer_3_3-Max_258x1656.png');
 const liteLayer4 = ref('src/img/1-lite/Layer_4_1-Lite_720x1280.svg');
 const proLayer4 = ref('src/img/2-Pro/Layer_4_2-Pro_720x1280.svg');
 const maxLayer4 = ref('src/img/3-Max/Layer_4_3-Max_720x1280.svg');
@@ -73,6 +82,7 @@ const scrollToRocket = ref<HTMLElement | null>(null);
 const activeRocket = ref(1);
 
 const rockets = ref(['rocket_1', 'rocket_2', 'rocket_3']);
+const slotFrames = ref(['slot_frame_1', 'slot_frame_2', 'slot_frame_3']);
 
 function scrollToRocketById(rocketId: string) {
   const rocket = document.getElementById(rocketId);
@@ -80,6 +90,23 @@ function scrollToRocketById(rocketId: string) {
     rocket.scrollIntoView({ behavior: 'smooth' });
     scrollToRocket.value = rocket;
     activeRocket.value = rockets.value.indexOf(rocketId) + 1;
+  }
+}
+
+function scrollToSlotFrame() {
+  const slotFrameId = slotFrames.value[activeRocket.value - 1];
+  const slotFrame = document.getElementById(slotFrameId);
+  if (slotFrame) {
+    // Добавляем класс slot_frame_acceleration к текущему слот-фейму
+    slotFrame.classList.add('slot_frame_acceleration');
+
+    // Отслеживаем окончание анимации
+    slotFrame.addEventListener('animationend', () => {
+      // Удаляем класс slot_frame_acceleration
+      slotFrame.classList.remove('slot_frame_acceleration');
+      // Добавляем класс slot_frame_animation_full_speed
+      slotFrame.classList.add('slot_frame_full_speed');
+    }, { once: true });
   }
 }
 
@@ -102,6 +129,7 @@ function imageLoaded() {
   transform: translate(-50%);
   height: 100%;
   width: auto;
+  aspect-ratio: 9 / 16;
 }
 
 .wrapper {
@@ -191,5 +219,38 @@ function imageLoaded() {
   width: auto;
   position: relative;
   top: 0;
+}
+
+.slot_frame {
+  position: absolute;
+  height: 28%;
+  top: 37%;
+  width: 20vh;
+  left: 50%;
+  transform: translate(-50%);
+  background-size: cover;
+  background-position-y: 11%;
+  background-repeat: repeat-y;
+  border-radius: 10vh;
+}
+
+.slot_frame_acceleration {
+  animation: slot_frame_animation_acceleration 5s ease-in forwards;
+}
+
+@keyframes slot_frame_animation_acceleration {
+  100% {
+    background-position-y: -500%;
+  }
+}
+
+.slot_frame_full_speed {
+  animation: slot_frame_animation_full_speed 5s linear infinite;
+}
+
+@keyframes slot_frame_animation_full_speed {
+  100% {
+    background-position-y: -700%;
+  }
 }
 </style>
