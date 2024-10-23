@@ -46,7 +46,7 @@
     <img :src="btn4" class="btn_row_btn" @click="scrollToSlotFrame" alt="" />
   </div>
   
-  <img id="vinget_layer" :src="vingetLayer7" class="rocket_base_layers hide" alt="" />
+  <img id="vinget_layer" :src="vingetLayer7" class="vinget_layer hide" alt="" />
 </template>
 
 <script setup lang="ts">
@@ -175,6 +175,17 @@ function imageLoaded(): void {
   height: 100%;
   width: auto;
   aspect-ratio: 9 / 16;
+}
+
+.vinget_layer {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%);
+  height: 100%;
+  width: auto;
+  aspect-ratio: 9 / 16;
+  z-index: 50;
 }
 
 .wrapper {
