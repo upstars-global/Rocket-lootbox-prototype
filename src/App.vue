@@ -71,11 +71,12 @@ const liteLayer6 = ref<string>('src/img/1-lite/Layer_6_1-Lite_720x1280.svg');
 const proLayer6 = ref<string>('src/img/2-Pro/Layer_6_2-Pro_720x1280.svg');
 const maxLayer6 = ref<string>('src/img/3-Max/Layer_6_3-Max_720x1280.svg');
 const vingetLayer7 = ref<string>('src/img/Layer_7_for_all_rockets_720x1280.svg');
-const ui_referanse = ref<string>('src/img/referances/ui_referanse.svg');
+const ui_referanse = ref<string>('src/Ref.svg');
 const btn1 = ref<string>('src/img/referances/btn1.svg');
 const btn2 = ref<string>('src/img/referances/btn2.svg');
 const btn3 = ref<string>('src/img/referances/btn3.svg');
 const btn4 = ref<string>('src/img/referances/btn4.svg');
+
 
 const loading = ref<boolean>(true);
 const loadedImages = ref<number>(0);
@@ -106,6 +107,12 @@ const backgroundPositions = ref<string[]>([
 
 function scrollToRocketById(rocketId: string): void {
   const rocket = document.getElementById(rocketId);
+  const vingetLayer = document.getElementById('vinget_layer');
+
+  if (vingetLayer && vingetLayer.classList.contains('fade_in')) {
+    vingetLayer.classList.remove('fade_in');
+  }
+
   if (rocket) {
     rocket.scrollIntoView({ behavior: 'smooth' });
     activeRocket.value = rockets.value.indexOf(rocketId) + 1;
