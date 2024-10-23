@@ -93,7 +93,10 @@ function scrollToRocketById(rocketId: string) {
   }
 }
 
-const winSlotFrame = ref(null);
+// выиграшный фрейм. Учел что он может быть в начале null поскольку бек еще не отдал значение, 
+// тогда слот будет вращаться и проверять значение каждую секунду
+
+const winSlotFrame = ref(5);
 
 function scrollToSlotFrame() {
   const slotFrameId = slotFrames.value[activeRocket.value - 1];
@@ -110,26 +113,37 @@ function scrollToSlotFrame() {
       // Добавляем класс slot_frame_animation_full_speed
       slotFrame.classList.add('slot_frame_full_speed');
       
-      // Устанавливаем значение winSlotFrame (например, 1 или 2)
-      winSlotFrame.value = 1; // или любое другое значение, которое вы хотите установить
-      
-      // Вызываем функцию для установки значения CSS-переменной и добавления/удаления классов после задержки
-      setTimeout(() => {
-        setSlotFrameStyles(slotFrame, winSlotFrame.value);
+      // Запускаем проверку значения winSlotFrame каждую секунду
+      const checkWinSlotFrame = setInterval(() => {
+        if (winSlotFrame.value !== null) {
+          // Если значение не null, вызываем setSlotFrameStyles и очищаем интервал
+          setSlotFrameStyles(slotFrame, winSlotFrame.value);
+          clearInterval(checkWinSlotFrame);
+        }
       }, 1000);
     }, { once: true });
   }
 }
 
+// массив значений background-position-y для каждого слота, стоит перепроверить. Все версталось за пол дня на очень скорую руку
+const backgroundPositions = [
+  '-518%',
+  '-501%', 
+  '-486%',
+  '-471%',
+  '-453%',
+  '-437%',
+  '-421%',
+  '-405%'
+];
+
 function setSlotFrameStyles(slotFrame, winSlotFrameValue) {
-  // Устанавливаем значение CSS-переменной --background-position-y
-  const backgroundPositionY = winSlotFrameValue === 1 ? '-710%' : '-725%';
+  // Получаем значение backgroundPositionY из массива по индексу winSlotFrameValue - 1
+  const backgroundPositionY = backgroundPositions[winSlotFrameValue - 1] || '-518%';
+  
   slotFrame.style.setProperty('--background-position-y', backgroundPositionY);
-  
-  // Удаляем класс slot_frame_full_speed
+
   slotFrame.classList.remove('slot_frame_full_speed');
-  
-  // Добавляем класс slot_frame_end
   slotFrame.classList.add('slot_frame_end');
 }
 
@@ -258,7 +272,7 @@ function imageLoaded() {
 }
 
 .slot_frame_acceleration {
-  animation: slot_frame_animation_acceleration 3s ease-in forwards;
+  animation: slot_frame_animation_acceleration 3s cubic-bezier(1,0,1,1) forwards;
 }
 
 @keyframes slot_frame_animation_acceleration {
@@ -273,14 +287,14 @@ function imageLoaded() {
 
 @keyframes slot_frame_animation_full_speed {
   100% {
-    background-position-y: -300%;
+    background-position-y: -250%;
   }
 }
 
 
 
 .slot_frame_end {
-  animation: slot_frame_animation_end 3s ease-out forwards;
+  animation: slot_frame_animation_end 5s cubic-bezier(0,0,0,1) forwards;
 }
 
 @keyframes slot_frame_animation_end {
