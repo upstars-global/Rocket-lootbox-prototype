@@ -6,7 +6,7 @@
   <div class="wrapper">
     
     <div class="rockets_column">
-      <div id="rocket_3" class="rocket_container">
+      <div id="rocket_1" class="rocket_container">
         <img :src="baseLayer" class="rocket_base_layers" alt="" @load="imageLoaded"/>
         <img :src="liteLayer2" class="rocket_base_layers" alt="" @load="imageLoaded"/> 
         <img :src="liteLayer4" class="rocket_base_layers" alt="" @load="imageLoaded"/>
@@ -15,17 +15,17 @@
       </div>
       <div id="rocket_2" class="rocket_container">
         <img :src="baseLayer" class="rocket_base_layers" alt="" @load="imageLoaded"/>
-        <img :src="liteLayer2" class="rocket_base_layers" alt="" @load="imageLoaded"/> 
-        <img :src="liteLayer4" class="rocket_base_layers" alt="" @load="imageLoaded"/>
-        <img :src="liteLayer5" class="rocket_base_layers" alt="" @load="imageLoaded"/>
-        <img :src="liteLayer6" class="rocket_base_layers hide" alt="" @load="imageLoaded"/>
+        <img :src="proLayer2" class="rocket_base_layers" alt="" @load="imageLoaded"/> 
+        <img :src="proLayer4" class="rocket_base_layers" alt="" @load="imageLoaded"/>
+        <img :src="proLayer5" class="rocket_base_layers" alt="" @load="imageLoaded"/>
+        <img :src="proLayer6" class="rocket_base_layers hide" alt="" @load="imageLoaded"/>
       </div>
-      <div id="rocket_1" class="rocket_container">
+      <div id="rocket_3" class="rocket_container">
         <img :src="baseLayer" class="rocket_base_layers" alt="" @load="imageLoaded"/>
-        <img :src="liteLayer2" class="rocket_base_layers" alt="" @load="imageLoaded"/> 
-        <img :src="liteLayer4" class="rocket_base_layers" alt="" @load="imageLoaded"/>
-        <img :src="liteLayer5" class="rocket_base_layers" alt="" @load="imageLoaded"/>
-        <img :src="liteLayer6" class="rocket_base_layers hide" alt="" @load="imageLoaded"/>
+        <img :src="maxLayer2" class="rocket_base_layers" alt="" @load="imageLoaded"/> 
+        <img :src="maxLayer4" class="rocket_base_layers" alt="" @load="imageLoaded"/>
+        <img :src="maxLayer5" class="rocket_base_layers" alt="" @load="imageLoaded"/>
+        <img :src="maxLayer6" class="rocket_base_layers hide" alt="" @load="imageLoaded"/>
       </div>
     </div>
 
@@ -35,9 +35,9 @@
   </div>
   <img :src="ui_referanse" class="ui_referanse" alt="" />
       <div class="btn_row">
-        <img :src="btn1" class="btn_row_btn" alt="" @click="scrollToRocketById('rocket_1')" />
-        <img :src="btn2" class="btn_row_btn" alt="" @click="scrollToRocketById('rocket_2')" />
-        <img :src="btn3" class="btn_row_btn" alt="" @click="scrollToRocketById('rocket_3')" />
+        <img :src="btn1" :class="{'btn_row_btn': true, 'btn_inactive': activeRocket !== 1}" alt="" @click="scrollToRocketById('rocket_1')" />
+        <img :src="btn2" :class="{'btn_row_btn': true, 'btn_inactive': activeRocket !== 2}" alt="" @click="scrollToRocketById('rocket_2')" />
+        <img :src="btn3" :class="{'btn_row_btn': true, 'btn_inactive': activeRocket !== 3}" alt="" @click="scrollToRocketById('rocket_3')" />
         <img :src="btn4" class="btn_row_btn" alt="" />
       </div>
 
@@ -50,9 +50,17 @@ import { ref } from 'vue';
 const preloader = ref('src/img/PreloaderAlpa_130x130.svg');
 const baseLayer = ref('src/img/Layer_1_for_all_rokets_720x1280.svg');
 const liteLayer2 = ref('src/img/1-lite/Layer_2_1-Lite_720x1280.svg');
-const liteLayer4 = ref('src/img/1-lite/Layer_4_1-Lite_720x1280.svg'); 
+const proLayer2 = ref('src/img/2-Pro/Layer_2_2-Pro_720x1280.svg');
+const maxLayer2 = ref('src/img/3-Max/Layer_2_3-Max_720x1280.svg');
+const liteLayer4 = ref('src/img/1-lite/Layer_4_1-Lite_720x1280.svg');
+const proLayer4 = ref('src/img/2-Pro/Layer_4_2-Pro_720x1280.svg');
+const maxLayer4 = ref('src/img/3-Max/Layer_4_3-Max_720x1280.svg');
 const liteLayer5 = ref('src/img/1-lite/Layer_5_1-Lite_720x1280.svg');
+const proLayer5 = ref('src/img/2-Pro/Layer_5_2-Pro_720x1280.svg');
+const maxLayer5 = ref('src/img/3-Max/Layer_5_3-Max_720x1280.svg');
 const liteLayer6 = ref('src/img/1-lite/Layer_6_1-Lite_720x1280.svg');
+const proLayer6 = ref('src/img/2-Pro/Layer_6_2-Pro_720x1280.svg');
+const maxLayer6 = ref('src/img/3-Max/Layer_6_3-Max_720x1280.svg');
 const ui_referanse = ref('src/img/referances/ui_referance.svg');
 const btn1 = ref('src/img/referances/btn1.svg');
 const btn2 = ref('src/img/referances/btn2.svg');
@@ -62,12 +70,22 @@ const btn4 = ref('src/img/referances/btn4.svg');
 const loading = ref(true);
 const loadedImages = ref(0);
 const scrollToRocket = ref<HTMLElement | null>(null);
+const activeRocket = ref(1);
 
 function scrollToRocketById(rocketId: string) {
   const rocket = document.getElementById(rocketId);
   if (rocket) {
     rocket.scrollIntoView({ behavior: 'smooth' });
     scrollToRocket.value = rocket;
+
+    // Обновляем значение activeRocket в зависимости от выбранной ракеты
+    if (rocketId === 'rocket_1') {
+      activeRocket.value = 1;
+    } else if (rocketId === 'rocket_2') {
+      activeRocket.value = 2;
+    } else if (rocketId === 'rocket_3') {
+      activeRocket.value = 3;
+    }
   }
 }
 
@@ -157,8 +175,8 @@ function imageLoaded() {
 }
 
 
-.btn_row_btn:hover {
-  filter: brightness(0.8);
+.btn_inactive {
+  filter: brightness(0.6);
 }
 
 
