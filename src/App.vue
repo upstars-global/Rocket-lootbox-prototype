@@ -46,7 +46,7 @@
         <img :src="btn3" :class="{'btn_row_btn': true, 'btn_inactive': activeRocket !== 3}" alt="" @click="scrollToRocketById('rocket_3')" />
         <img :src="btn4" class="btn_row_btn" @click="scrollToSlotFrame" alt="" />
       </div>
-
+      <img id="vinget_layer" :src="vingetLayer7" class="rocket_base_layers hide" alt="" />
   
 </template>
 
@@ -70,6 +70,7 @@ const maxLayer5 = ref('src/img/3-Max/Layer_5_3-Max_720x1280.svg');
 const liteLayer6 = ref('src/img/1-lite/Layer_6_1-Lite_720x1280.svg');
 const proLayer6 = ref('src/img/2-Pro/Layer_6_2-Pro_720x1280.svg');
 const maxLayer6 = ref('src/img/3-Max/Layer_6_3-Max_720x1280.svg');
+const vingetLayer7 = ref('src/img/Layer_7_for_all_rockets_720x1280.svg');
 const ui_referanse = ref('src/img/referances/ui_referance.svg');
 const btn1 = ref('src/img/referances/btn1.svg');
 const btn2 = ref('src/img/referances/btn2.svg');
@@ -105,10 +106,19 @@ const winSlotFrame = ref(5);
 
 function scrollToSlotFrame() {
   const slotFrameId = slotFrames.value[activeRocket.value - 1];
+  const waitingLightId = waitingLights.value[activeRocket.value - 1];
+  const spinLightId = spinLights.value[activeRocket.value - 1];
   const slotFrame = document.getElementById(slotFrameId);
+  const waitingLight = document.getElementById(waitingLightId);
+  const spinLight = document.getElementById(spinLightId);
+  const vingetLayer = document.getElementById('vinget_layer');
+
   if (slotFrame) {
     // Добавляем класс slot_frame_acceleration к текущему слот-фрейму
     slotFrame.classList.add('slot_frame_acceleration');
+    waitingLight.classList.add('fade_out');
+    spinLight.classList.add('fade_in');
+    vingetLayer.classList.add('fade_in');
 
     // Отслеживаем окончание анимации
     slotFrame.addEventListener('animationend', () => {
