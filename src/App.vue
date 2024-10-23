@@ -50,88 +50,90 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { ref } from 'vue';
 import MobileText from './components/MobileText.vue';
 
-const preloader = ref('src/img/PreloaderAlpa_130x130.svg');
-const baseLayer = ref('src/img/Layer_1_for_all_rokets_720x1280.svg');
-const liteLayer2 = ref('src/img/1-lite/Layer_2_1-Lite_720x1280.svg');
-const proLayer2 = ref('src/img/2-Pro/Layer_2_2-Pro_720x1280.svg');
-const maxLayer2 = ref('src/img/3-Max/Layer_2_3-Max_720x1280.svg');
-const liteLayer3 = ref('src/img/1-lite/Layer_3_1-Lite_258x1656.png');
-const proLayer3 = ref('src/img/2-Pro/Layer_3_2-Pro_258x1656.png');
-const maxLayer3 = ref('src/img/3-Max/Layer_3_3-Max_258x1656.png');
-const liteLayer4 = ref('src/img/1-lite/Layer_4_1-Lite_720x1280.svg');
-const proLayer4 = ref('src/img/2-Pro/Layer_4_2-Pro_720x1280.svg');
-const maxLayer4 = ref('src/img/3-Max/Layer_4_3-Max_720x1280.svg');
-const liteLayer5 = ref('src/img/1-lite/Layer_5_1-Lite_720x1280.svg');
-const proLayer5 = ref('src/img/2-Pro/Layer_5_2-Pro_720x1280.svg');
-const maxLayer5 = ref('src/img/3-Max/Layer_5_3-Max_720x1280.svg');
-const liteLayer6 = ref('src/img/1-lite/Layer_6_1-Lite_720x1280.svg');
-const proLayer6 = ref('src/img/2-Pro/Layer_6_2-Pro_720x1280.svg');
-const maxLayer6 = ref('src/img/3-Max/Layer_6_3-Max_720x1280.svg');
-const vingetLayer7 = ref('src/img/Layer_7_for_all_rockets_720x1280.svg');
-const ui_referanse = ref('src/img/referances/ui_referance.svg');
-const btn1 = ref('src/img/referances/btn1.svg');
-const btn2 = ref('src/img/referances/btn2.svg');
-const btn3 = ref('src/img/referances/btn3.svg');
-const btn4 = ref('src/img/referances/btn4.svg');
+const preloader = ref<string>('src/img/PreloaderAlpa_130x130.svg');
+const baseLayer = ref<string>('src/img/Layer_1_for_all_rokets_720x1280.svg');
+const liteLayer2 = ref<string>('src/img/1-lite/Layer_2_1-Lite_720x1280.svg');
+const proLayer2 = ref<string>('src/img/2-Pro/Layer_2_2-Pro_720x1280.svg');
+const maxLayer2 = ref<string>('src/img/3-Max/Layer_2_3-Max_720x1280.svg');
+const liteLayer3 = ref<string>('src/img/1-lite/Layer_3_1-Lite_258x1656.png');
+const proLayer3 = ref<string>('src/img/2-Pro/Layer_3_2-Pro_258x1656.png');
+const maxLayer3 = ref<string>('src/img/3-Max/Layer_3_3-Max_258x1656.png');
+const liteLayer4 = ref<string>('src/img/1-lite/Layer_4_1-Lite_720x1280.svg');
+const proLayer4 = ref<string>('src/img/2-Pro/Layer_4_2-Pro_720x1280.svg');
+const maxLayer4 = ref<string>('src/img/3-Max/Layer_4_3-Max_720x1280.svg');
+const liteLayer5 = ref<string>('src/img/1-lite/Layer_5_1-Lite_720x1280.svg');
+const proLayer5 = ref<string>('src/img/2-Pro/Layer_5_2-Pro_720x1280.svg');
+const maxLayer5 = ref<string>('src/img/3-Max/Layer_5_3-Max_720x1280.svg');
+const liteLayer6 = ref<string>('src/img/1-lite/Layer_6_1-Lite_720x1280.svg');
+const proLayer6 = ref<string>('src/img/2-Pro/Layer_6_2-Pro_720x1280.svg');
+const maxLayer6 = ref<string>('src/img/3-Max/Layer_6_3-Max_720x1280.svg');
+const vingetLayer7 = ref<string>('src/img/Layer_7_for_all_rockets_720x1280.svg');
+const ui_referanse = ref<string>('src/img/referances/ui_referanse.svg');
+const btn1 = ref<string>('src/img/referances/btn1.svg');
+const btn2 = ref<string>('src/img/referances/btn2.svg');
+const btn3 = ref<string>('src/img/referances/btn3.svg');
+const btn4 = ref<string>('src/img/referances/btn4.svg');
 
-const loading = ref(true);
-const loadedImages = ref(0);
-const scrollToRocket = ref<HTMLElement | null>(null);
-const activeRocket = ref(1);
+const loading = ref<boolean>(true);
+const loadedImages = ref<number>(0);
+const activeRocket = ref<number>(1);
 
-const rockets = ref(['rocket_1', 'rocket_2', 'rocket_3']);
-const slotFrames = ref(['slot_frame_1', 'slot_frame_2', 'slot_frame_3']);
-const waitingLights = ref(['lights_1_waing', 'lights_2_waing', 'lights_3_waing']);
-const spinLights = ref(['lights_1_spin', 'lights_2_spin', 'lights_3_spin']);
+const rockets = ref<string[]>(['rocket_1', 'rocket_2', 'rocket_3']);
+const slotFrames = ref<string[]>(['slot_frame_1', 'slot_frame_2', 'slot_frame_3']);
+const waitingLights = ref<string[]>(['lights_1_waing', 'lights_2_waing', 'lights_3_waing']);
+const spinLights = ref<string[]>(['lights_1_spin', 'lights_2_spin', 'lights_3_spin']);
 
-function scrollToRocketById(rocketId: string) {
+// выиграшный фрейм. Учел что он может быть в начале null поскольку бек еще не отдал значение, 
+// тогда слот будет вращаться и проверять значение каждую секунду в function scrollToSlotFrame
+const winSlotFrame = ref<number | null>(5);
+
+// массив значений background-position-y для каждого слота, стоит перепроверить. Все версталось за пол дня на очень скорую руку. 
+// На мобилке в Хроме может быть смещение из за нижней панели бразера, поэтому возможно стоит использовать фактические значения в пикселях
+// либо задать дополнительное значение в dvh для поддерживаемых браузеров
+const backgroundPositions = ref<string[]>([
+  '-518%',
+  '-501%',
+  '-486%', 
+  '-471%',
+  '-453%',
+  '-437%',
+  '-421%',
+  '-405%'
+]);
+
+function scrollToRocketById(rocketId: string): void {
   const rocket = document.getElementById(rocketId);
   if (rocket) {
     rocket.scrollIntoView({ behavior: 'smooth' });
-    scrollToRocket.value = rocket;
     activeRocket.value = rockets.value.indexOf(rocketId) + 1;
   }
 }
 
-// выиграшный фрейм. Учел что он может быть в начале null поскольку бек еще не отдал значение, 
-// тогда слот будет вращаться и проверять значение каждую секунду
-const winSlotFrame = ref(5);
-
-
-
-
-
-function scrollToSlotFrame() {
+function scrollToSlotFrame(): void {
   const slotFrameId = slotFrames.value[activeRocket.value - 1];
   const waitingLightId = waitingLights.value[activeRocket.value - 1];
   const spinLightId = spinLights.value[activeRocket.value - 1];
+  
   const slotFrame = document.getElementById(slotFrameId);
   const waitingLight = document.getElementById(waitingLightId);
   const spinLight = document.getElementById(spinLightId);
   const vingetLayer = document.getElementById('vinget_layer');
 
-  if (slotFrame) {
-    // Добавляем класс slot_frame_acceleration к текущему слот-фрейму
+  if (slotFrame && waitingLight && spinLight && vingetLayer) {
     slotFrame.classList.add('slot_frame_acceleration');
     waitingLight.classList.add('fade_out');
     spinLight.classList.add('fade_in');
     vingetLayer.classList.add('fade_in');
 
-    // Отслеживаем окончание анимации
     slotFrame.addEventListener('animationend', () => {
-      // Удаляем класс slot_frame_acceleration
       slotFrame.classList.remove('slot_frame_acceleration');
-      
-      // Добавляем класс slot_frame_animation_full_speed
       slotFrame.classList.add('slot_frame_full_speed');
       
-      // Запускаем проверку значения winSlotFrame каждую секунду
       const checkWinSlotFrame = setInterval(() => {
         if (winSlotFrame.value !== null) {
-          // Если значение не null, вызываем setSlotFrameStyles и очищаем интервал
           setSlotFrameStyles(slotFrame, winSlotFrame.value);
           clearInterval(checkWinSlotFrame);
         }
@@ -140,37 +142,19 @@ function scrollToSlotFrame() {
   }
 }
 
-// массив значений background-position-y для каждого слота, стоит перепроверить. Все версталось за пол дня на очень скорую руку. 
-// На мобилке в Хроме может быть смещение из за нижней панели бразера, поэтому возможно стоит использовать фактические значения в пикселях
-// либо задать дополнительное значение в dvh для поддерживаемых браузеров
-const backgroundPositions = [
-  '-518%',
-  '-501%', 
-  '-486%',
-  '-471%',
-  '-453%',
-  '-437%',
-  '-421%',
-  '-405%'
-];
-
-function setSlotFrameStyles(slotFrame, winSlotFrameValue) {
-  // Получаем значение backgroundPositionY из массива по индексу winSlotFrameValue - 1
-  const backgroundPositionY = backgroundPositions[winSlotFrameValue - 1] || '-518%';
-  
+function setSlotFrameStyles(slotFrame: HTMLElement, winSlotFrameValue: number): void {
+  const backgroundPositionY = backgroundPositions.value[winSlotFrameValue - 1] || '-518%';
   slotFrame.style.setProperty('--background-position-y', backgroundPositionY);
-
   slotFrame.classList.remove('slot_frame_full_speed');
   slotFrame.classList.add('slot_frame_end');
 }
 
-function imageLoaded() {
+function imageLoaded(): void {
   loadedImages.value++;
   if (loadedImages.value === 15) {
     loading.value = false;
   }
 }
-
 
 </script>
 
@@ -322,7 +306,7 @@ function imageLoaded() {
 
 
 .fade_in {
-  animation: fade_in 0.5s ease-in forwards;
+  animation: fade_in 0.8s ease-in forwards;
 }
 
 @keyframes fade_in {
@@ -332,7 +316,7 @@ function imageLoaded() {
 }
 
 .fade_out {
-  animation: fade_out 0.5s ease-out forwards;
+  animation: fade_out 0.8s ease-out forwards;
 }
 
 @keyframes fade_out {
@@ -342,6 +326,7 @@ function imageLoaded() {
   }
   100% {
     display: none;
+    opacity: 0;
   }
 }
 

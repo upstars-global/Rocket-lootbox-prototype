@@ -57,6 +57,7 @@ const props = defineProps({
     default: 'UP TO 1000 AUD',
   },
 });
+
 </script>
 
 <style module>
