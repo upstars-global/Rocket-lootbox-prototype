@@ -1,5 +1,5 @@
 <template>
-  <svg width="360" height="640" viewBox="0 0 360 640" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <svg width="360" height="640" viewBox="0 0 360 640">
     <g filter="url(#filter0_d_9390_310)">
       <text fill="#1BE176" fill-opacity="0.8" shape-rendering="crispEdges" xml:space="preserve" style="white-space: pre" :class="$style.text" font-size="7.9808" font-weight="bold" letter-spacing="0em">
         <tspan x="124.325" y="172.975">{{ topText }}</tspan>

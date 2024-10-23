@@ -1,10 +1,8 @@
 <template>
-
-   <div v-if="loading" class="preloader">
-      <img :src="preloader" class="preloader_img" alt="" />
-    </div>
+  <div v-if="loading" class="preloader">
+    <img :src="preloader" class="preloader_img" alt="" />
+  </div>
   <div class="wrapper">
-    
     <div class="rockets_column">
       <div id="rocket_1" class="rocket_container">
         <img :src="baseLayer" class="rocket_base_layers" alt="" @load="imageLoaded"/>
@@ -14,6 +12,7 @@
         <img :src="liteLayer4" class="rocket_base_layers" alt="" @load="imageLoaded"/>
         <img id="lights_1_waing" :src="liteLayer5" class="rocket_base_layers" alt="" @load="imageLoaded"/>
         <img id="lights_1_spin" :src="liteLayer6" class="rocket_base_layers hide" alt="" @load="imageLoaded"/>
+        <MobileText class="rocket_base_layers" top-text="SPIN AND GET LITE PRIZES" bottom-text="UP TO 1000 AUD" />
       </div>
       <div id="rocket_2" class="rocket_container">
         <img :src="baseLayer" class="rocket_base_layers" alt="" @load="imageLoaded"/>
@@ -23,6 +22,7 @@
         <img :src="proLayer4" class="rocket_base_layers" alt="" @load="imageLoaded"/>
         <img id="lights_2_waing" :src="proLayer5" class="rocket_base_layers" alt="" @load="imageLoaded"/>
         <img id="lights_2_spin" :src="proLayer6" class="rocket_base_layers hide" alt="" @load="imageLoaded"/>
+        <MobileText class="rocket_base_layers" top-text="SPIN AND GET PRO PRIZES" bottom-text="UP TO 2500 AUD" />
       </div>
       <div id="rocket_3" class="rocket_container">
         <img :src="baseLayer" class="rocket_base_layers" alt="" @load="imageLoaded"/>
@@ -32,26 +32,26 @@
         <img :src="maxLayer4" class="rocket_base_layers" alt="" @load="imageLoaded"/>
         <img id="lights_3_waing" :src="maxLayer5" class="rocket_base_layers" alt="" @load="imageLoaded"/>
         <img id="lights_3_spin" :src="maxLayer6" class="rocket_base_layers hide" alt="" @load="imageLoaded"/>
+        <MobileText class="rocket_base_layers" top-text="SPIN AND GET MAX PRIZES" bottom-text="UP TO 5000 AUD" />
       </div>
     </div>
-
-
-
-      
   </div>
-  <img :src="ui_referanse" class="ui_referanse" alt="" />
-      <div class="btn_row">
-        <img :src="btn1" :class="{'btn_row_btn': true, 'btn_inactive': activeRocket !== 1}" alt="" @click="scrollToRocketById('rocket_1')" />
-        <img :src="btn2" :class="{'btn_row_btn': true, 'btn_inactive': activeRocket !== 2}" alt="" @click="scrollToRocketById('rocket_2')" />
-        <img :src="btn3" :class="{'btn_row_btn': true, 'btn_inactive': activeRocket !== 3}" alt="" @click="scrollToRocketById('rocket_3')" />
-        <img :src="btn4" class="btn_row_btn" @click="scrollToSlotFrame" alt="" />
-      </div>
-      <img id="vinget_layer" :src="vingetLayer7" class="rocket_base_layers hide" alt="" />
   
+  <img :src="ui_referanse" class="ui_referanse" alt="" />
+  
+  <div class="btn_row">
+    <img :src="btn1" :class="{'btn_row_btn': true, 'btn_inactive': activeRocket !== 1}" alt="" @click="scrollToRocketById('rocket_1')" />
+    <img :src="btn2" :class="{'btn_row_btn': true, 'btn_inactive': activeRocket !== 2}" alt="" @click="scrollToRocketById('rocket_2')" />
+    <img :src="btn3" :class="{'btn_row_btn': true, 'btn_inactive': activeRocket !== 3}" alt="" @click="scrollToRocketById('rocket_3')" />
+    <img :src="btn4" class="btn_row_btn" @click="scrollToSlotFrame" alt="" />
+  </div>
+  
+  <img id="vinget_layer" :src="vingetLayer7" class="rocket_base_layers hide" alt="" />
 </template>
 
 <script setup lang="ts">
 import { ref, watch } from 'vue';
+import MobileText from './components/MobileText.vue';
 
 const preloader = ref('src/img/PreloaderAlpa_130x130.svg');
 const baseLayer = ref('src/img/Layer_1_for_all_rokets_720x1280.svg');
