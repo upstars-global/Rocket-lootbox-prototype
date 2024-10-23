@@ -93,19 +93,25 @@ function scrollToRocketById(rocketId: string) {
   }
 }
 
+const winSlotFrame = ref(1);
 function scrollToSlotFrame() {
   const slotFrameId = slotFrames.value[activeRocket.value - 1];
   const slotFrame = document.getElementById(slotFrameId);
   if (slotFrame) {
-    // Добавляем класс slot_frame_acceleration к текущему слот-фейму
+    // Добавляем класс slot_frame_acceleration к текущему слот-фрейму
     slotFrame.classList.add('slot_frame_acceleration');
 
     // Отслеживаем окончание анимации
     slotFrame.addEventListener('animationend', () => {
       // Удаляем класс slot_frame_acceleration
       slotFrame.classList.remove('slot_frame_acceleration');
+      
       // Добавляем класс slot_frame_animation_full_speed
       slotFrame.classList.add('slot_frame_full_speed');
+      
+      // Устанавливаем значение CSS-переменной --background-position-y
+      const backgroundPositionY = winSlotFrame.value === 1 ? '900%' : '905%';
+      slotFrame.style.setProperty('--background-position-y', backgroundPositionY);
     }, { once: true });
   }
 }
@@ -253,4 +259,19 @@ function imageLoaded() {
     background-position-y: -700%;
   }
 }
+
+
+
+.slot_frame_end {
+  animation: slot_frame_animation_end 5s ease-out infinite;
+}
+
+@keyframes slot_frame_animation_end {
+  100% {
+    background-position-y: var(--background-position-y);
+  }
+}
+
+
+
 </style>
