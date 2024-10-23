@@ -12,8 +12,8 @@
         <div id="slot_frame_1" class="slot_frame" :style="{ backgroundImage: `url(${liteLayer3})` }">
         </div>
         <img :src="liteLayer4" class="rocket_base_layers" alt="" @load="imageLoaded"/>
-        <img :src="liteLayer5" class="rocket_base_layers" alt="" @load="imageLoaded"/>
-        <img :src="liteLayer6" class="rocket_base_layers hide" alt="" @load="imageLoaded"/>
+        <img id="lights_1_waing" :src="liteLayer5" class="rocket_base_layers" alt="" @load="imageLoaded"/>
+        <img id="lights_1_spin" :src="liteLayer6" class="rocket_base_layers hide" alt="" @load="imageLoaded"/>
       </div>
       <div id="rocket_2" class="rocket_container">
         <img :src="baseLayer" class="rocket_base_layers" alt="" @load="imageLoaded"/>
@@ -21,8 +21,8 @@
         <div id="slot_frame_2" class="slot_frame" :style="{ backgroundImage: `url(${proLayer3})` }">
         </div>
         <img :src="proLayer4" class="rocket_base_layers" alt="" @load="imageLoaded"/>
-        <img :src="proLayer5" class="rocket_base_layers" alt="" @load="imageLoaded"/>
-        <img :src="proLayer6" class="rocket_base_layers hide" alt="" @load="imageLoaded"/>
+        <img id="lights_2_waing" :src="proLayer5" class="rocket_base_layers" alt="" @load="imageLoaded"/>
+        <img id="lights_2_spin" :src="proLayer6" class="rocket_base_layers hide" alt="" @load="imageLoaded"/>
       </div>
       <div id="rocket_3" class="rocket_container">
         <img :src="baseLayer" class="rocket_base_layers" alt="" @load="imageLoaded"/>
@@ -30,8 +30,8 @@
         <div id="slot_frame_3" class="slot_frame" :style="{ backgroundImage: `url(${maxLayer3})` }">
         </div>
         <img :src="maxLayer4" class="rocket_base_layers" alt="" @load="imageLoaded"/>
-        <img :src="maxLayer5" class="rocket_base_layers" alt="" @load="imageLoaded"/>
-        <img :src="maxLayer6" class="rocket_base_layers hide" alt="" @load="imageLoaded"/>
+        <img id="lights_3_waing" :src="maxLayer5" class="rocket_base_layers" alt="" @load="imageLoaded"/>
+        <img id="lights_3_spin" :src="maxLayer6" class="rocket_base_layers hide" alt="" @load="imageLoaded"/>
       </div>
     </div>
 
@@ -83,6 +83,8 @@ const activeRocket = ref(1);
 
 const rockets = ref(['rocket_1', 'rocket_2', 'rocket_3']);
 const slotFrames = ref(['slot_frame_1', 'slot_frame_2', 'slot_frame_3']);
+const waitingLights = ref(['lights_1_waing', 'lights_2_waing', 'lights_3_waing']);
+const spinLights = ref(['lights_1_spin', 'lights_2_spin', 'lights_3_spin']);
 
 function scrollToRocketById(rocketId: string) {
   const rocket = document.getElementById(rocketId);
@@ -95,8 +97,11 @@ function scrollToRocketById(rocketId: string) {
 
 // выиграшный фрейм. Учел что он может быть в начале null поскольку бек еще не отдал значение, 
 // тогда слот будет вращаться и проверять значение каждую секунду
-
 const winSlotFrame = ref(5);
+
+
+
+
 
 function scrollToSlotFrame() {
   const slotFrameId = slotFrames.value[activeRocket.value - 1];
@@ -149,7 +154,7 @@ function setSlotFrameStyles(slotFrame, winSlotFrameValue) {
 
 function imageLoaded() {
   loadedImages.value++;
-  if (loadedImages.value === 4) {
+  if (loadedImages.value === 15) {
     loading.value = false;
   }
 }
@@ -185,7 +190,7 @@ function imageLoaded() {
   top: 0;
   left: 0;
   background: #000000;
-  z-index: 1000;
+  z-index: 3000;
 
 }
 
@@ -304,5 +309,28 @@ function imageLoaded() {
 }
 
 
+.fade_in {
+  animation: fade_in 0.5s ease-in forwards;
+}
+
+@keyframes fade_in {
+  100% {
+    opacity: 1;
+  }
+}
+
+.fade_out {
+  animation: fade_out 0.5s ease-out forwards;
+}
+
+@keyframes fade_out {
+  99% {
+    opacity: 0;
+    display: block;
+  }
+  100% {
+    display: none;
+  }
+}
 
 </style>
