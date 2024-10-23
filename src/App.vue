@@ -320,6 +320,9 @@ function imageLoaded(): void {
 }
 
 @keyframes fade_out {
+  0% {
+    opacity: 1;
+  }
   99% {
     opacity: 0;
     display: block;
@@ -329,5 +332,6 @@ function imageLoaded(): void {
     opacity: 0;
   }
 }
+
 
 </style>
